@@ -23,7 +23,7 @@ int main(void) {
 			sonuc = sonuc * 2;
 			printf("parent_dongu_%d : sonuc : %d \n", i, sonuc);
 		}
-		printf("PARENT SONUCU : %d \n", sonuc);
+		printf("PARENT SONUU : %d \n", sonuc);
 	} 
 	else if (fork_donus_degeri == -1) {
 		printf("ERROR : \n %d", errno);
