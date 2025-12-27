@@ -1,18 +1,15 @@
 #ifndef PIPEX_H
-#define PIPEX_H
+# define PIPEX_H
 
-# include <unistd.h> // fork ,execve
-# include <stdlib.h> // malloc ile free
-# include <stdio.h> // perror
-# include <sys/types.h> //pid_t ayrı bir struct tipiymiş onu da kullanıcaz
-# include <sys/wait.h> //waitpid
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <sys/wait.h>
 
-typedef struct s_pipex
-{
-	char *cmd;//kullanıcıdan gelen komut ls -l gibi
-	char **cmd_args;
-	char *cmd_path;
-	char **envp;
-} t_pipex;
+void	error_exit(char *msg);
+char	*find_path(char *cmd, char **envp);
+void	exec_input(int *pipe_end, char **av, char **envp);
+void	exec_output(int *pipe_end, char **av, char **envp);
 
 #endif

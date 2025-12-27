@@ -3,31 +3,21 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
-SRCS = main.c
+SRCS = main.c exec.c path.c error.c
 OBJS = $(SRCS:.c=.o)
-
-INCLUDES = -I. -I$(LIBFT_DIR)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
-
-$(LIBFT):
-	make -C $(LIBFT_DIR)
-
-%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(NAME): $(OBJS)
+	make -C libft
+	$(CC) $(CFLAGS) $(OBJS) libft/libft.a -o $(NAME)
 
 clean:
 	rm -f $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	make clean -C libft
 
 fclean: clean
 	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	make fclean -C libft
 
 re: fclean all

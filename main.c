@@ -1,27 +1,23 @@
 #include "pipex.h"
-#include "libft/libft.h"
 
-int	main(int argc, char **argv, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_pipex	px;
+	int		pipe_end[2];
 	pid_t	pid;
 
-	if (argc != 2)
-	{
-		write(2, "Usage: ./pipex \"command\"\n", 26);
-		return (1);
-	}
-	px.cmd = argv[1];
-	px.cmd_args = ft_split(px.cmd, ' ');
-	px.cmd_path = "/bin/ls";
-	px.envp = envp;
+	if (ac != 5)
+		error_exit("Usage: ./pipex infile cmd1 cmd2 outfile");
+	if (pipe(pipe_end) == -1)
+		error_exit("pipe");
 	pid = fork();
 	if (pid == 0)
-	{
-		execve(px.cmd_path, px.cmd_args, px.envp);
-		perror("execve");
-		exit(1);
-	}
-	waitpid(pid, NULL, 0);
+		exec_input(pipe_end, av, envp);
+	pid = fork();
+	if (pid == 0)
+		exec_output(pipe_end, av, envp);
+	close(pipe_end[0]);
+	close(pipe_end[1]);
+	wait(NULL);
+	wait(NULL);
 	return (0);
 }
