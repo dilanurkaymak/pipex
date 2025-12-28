@@ -1,38 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/28 17:36:30 by dkaymak           #+#    #+#             */
+/*   Updated: 2025/12/28 17:36:31 by dkaymak          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
-#include "libft/libft.h"
 
-void	exec_input(int *pipe_end, char **av, char **envp)
+void	exec_cmd(char *cmd, char **envp)
 {
-	int		in;
-	char	**cmd;
+	char	**args;
 	char	*path;
 
-	in = open(av[1], O_RDONLY);
-	if (in < 0)
-		error_exit("infile");
-	dup2(in, STDIN_FILENO);
-	dup2(pipe_end[1], STDOUT_FILENO);
-	close(pipe_end[0]);
-	cmd = ft_split(av[2], ' ');
-	path = find_path(cmd[0], envp);
-	execve(path, cmd, envp);
-	error_exit("execve");
-}
-
-void	exec_output(int *pipe_end, char **av, char **envp)
-{
-	int		out;
-	char	**cmd;
-	char	*path;
-
-	out = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (out < 0)
-		error_exit("outfile");
-	dup2(pipe_end[0], STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-	close(pipe_end[1]);
-	cmd = ft_split(av[3], ' ');
-	path = find_path(cmd[0], envp);
-	execve(path, cmd, envp);
-	error_exit("execve");
+	if (!cmd || !*cmd)
+		error_exit("command not found", 127);
+	args = ft_split(cmd, ' ');
+	path = find_path(args[0], envp);
+	if (!path)
+	{
+		ft_free_split(args);
+		error_exit("command not found", 127);
+	}
+	execve(path, args, envp);
+	ft_free_split(args);
+	free(path);
+	error_exit("execve", 126);
 }
