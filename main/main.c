@@ -6,7 +6,7 @@
 /*   By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 17:36:45 by dkaymak           #+#    #+#             */
-/*   Updated: 2025/12/28 17:51:38 by dkaymak          ###   ########.fr       */
+/*   Updated: 2026/01/03 18:56:22 by dkaymak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ static void	child1(int *pipefd, char **av, char **envp)
 
 	infile = open(av[1], O_RDONLY);
 	if (infile < 0)
-		error_exit(av[1], 1);
+	{
+		write(2, "pipex: ", 7);
+        perror(av[1]);
+		infile = open("/dev/null", O_RDONLY);
+	}
 	dup2(infile, STDIN_FILENO);
 	dup2(pipefd[1], STDOUT_FILENO);
 	close(infile);
