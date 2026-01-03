@@ -1,25 +1,16 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/12/28 17:36:54 by dkaymak           #+#    #+#              #
-#    Updated: 2025/12/28 17:36:55 by dkaymak          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = pipex
-
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -Ilibft
-
-SRCS = main.c exec.c path.c error.c
-OBJS = $(SRCS:.c=.o)
+CFLAGS = -Wall -Wextra -Werror -I.
 
 LIBFT = libft/libft.a
+
+SRC = \
+	main/main.c \
+	main/exec.c \
+	main/path.c \
+	main/error.c
+
+OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
 
@@ -34,7 +25,9 @@ clean:
 	make -C libft clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(OBJS) $(NAME)
 	make -C libft fclean
 
 re: fclean all
+
+.PHONY: all clean fclean re
