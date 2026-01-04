@@ -6,7 +6,7 @@
 /*   By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 17:36:01 by dkaymak           #+#    #+#             */
-/*   Updated: 2026/01/04 12:30:00 by dkaymak          ###   ########.fr       */
+/*   Updated: 2026/01/04 15:58:57 by dkaymak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,15 @@ static char	*get_env_path(char **envp)
 
 char	*find_path(char *cmd, char **envp)
 {
+	char 	*env_path;
 	char	**paths;
 	char	*tmp;
 	char	*full;
 	int		i;
 
+	env_path = get_env_path(envp);
+	if(!env_path)
+		return(NULL);
 	paths = ft_split(get_env_path(envp), ':');
 	if (!paths)
 		return (NULL);
