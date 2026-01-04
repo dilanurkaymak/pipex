@@ -15,9 +15,6 @@
 void	error_exit(char *msg, int code)
 {
 	if (msg)
-	{
-		write(2, "pipex: ", 7);
 		perror(msg);
-	}
 	exit(code);
 }

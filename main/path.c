@@ -6,7 +6,7 @@
 /*   By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 17:36:01 by dkaymak           #+#    #+#             */
-/*   Updated: 2025/12/28 17:36:02 by dkaymak          ###   ########.fr       */
+/*   Updated: 2026/01/04 12:30:00 by dkaymak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	*get_env_path(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 			return (envp[i] + 5);
@@ -32,16 +32,12 @@ char	*find_path(char *cmd, char **envp)
 	char	*tmp;
 	char	*full;
 	int		i;
-	char	*env_path;
 
-	if (!cmd || access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	env_path = get_env_path(envp);
-	if (!env_path)
+	paths = ft_split(get_env_path(envp), ':');
+	if (!paths)
 		return (NULL);
-	paths = ft_split(env_path, ':');
-	i = 0;
-	while (paths && paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		full = ft_strjoin(tmp, cmd);
@@ -49,7 +45,6 @@ char	*find_path(char *cmd, char **envp)
 		if (access(full, X_OK) == 0)
 			return (ft_free_split(paths), full);
 		free(full);
-		i++;
 	}
 	ft_free_split(paths);
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: dkaymak <dkaymak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 17:36:45 by dkaymak           #+#    #+#             */
-/*   Updated: 2026/01/03 18:56:22 by dkaymak          ###   ########.fr       */
+/*   Updated: 2026/01/04 12:45:00 by dkaymak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ static void	child1(int *pipefd, char **av, char **envp)
 	infile = open(av[1], O_RDONLY);
 	if (infile < 0)
 	{
-		write(2, "pipex: ", 7);
-        perror(av[1]);
-		infile = open("/dev/null", O_RDONLY);
+		perror(av[1]);
+		exit(1);
 	}
 	dup2(infile, STDIN_FILENO);
 	dup2(pipefd[1], STDOUT_FILENO);
@@ -37,7 +36,10 @@ static void	child2(int *pipefd, char **av, char **envp)
 
 	outfile = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (outfile < 0)
-		error_exit(av[4], 1);
+	{
+		perror(av[4]);
+		exit(1);
+	}
 	dup2(pipefd[0], STDIN_FILENO);
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
@@ -54,9 +56,9 @@ int	main(int ac, char **av, char **envp)
 	int		status;
 
 	if (ac != 5)
-		return (1);
+		return (write(2, "Invalid arguments\n", 18), 1);
 	if (pipe(pipefd) < 0)
-		error_exit("pipe", 1);
+		return (perror("pipe"), 1);
 	pid1 = fork();
 	if (pid1 == 0)
 		child1(pipefd, av, envp);
