@@ -30,5 +30,3 @@ System Calls & Functions: pipe, fork, dup2, execve, access, waitpid
 Process Management: Parent and child processes communication
 
 Error Handling: Managing input/output errors and memory leaks
-
-Developed as a student at 42 School.
