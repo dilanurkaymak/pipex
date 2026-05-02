@@ -2,18 +2,20 @@
 
 This project is a part of the 42 School curriculum. The objective is to recreate the shell pipe mechanism (`|`) using C programming and system calls.
 
-## 📋 About
+## About
+
 `pipex` takes four arguments: two files and two shell commands. It reads from the first file, executes the first command with that input, passes the output to the second command, and writes the final result to the second file.
 
 It behaves exactly like the following shell command:
+
 ```bash
 < file1 cmd1 | cmd2 > file2
-🛠️ Usage
+
 Compiling
 You can compile the project using the provided Makefile:
 
-Bash
 make
+
 Running the program
 Bash
 ./pipex file1 cmd1 cmd2 file2
